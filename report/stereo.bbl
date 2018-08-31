@@ -1,0 +1,40 @@
+\begin{thebibliography}{1}
+
+\bibitem{CSDNJessicajiel18830}
+Jessica\&jie CSDN.
+\newblock 相机标定原理介绍（一）.
+\newblock \url{https://www.cnblogs.com/Jessica-jie/p/6596450.html}.
+
+\bibitem{CameraModels18830}
+cs.toronto.edu.
+\newblock Camera models and parameters.
+\newblock \url{http://ftp.cs.toronto.edu/pub/psala/VM/camera-parameters.pdf}.
+
+\bibitem{MathWorks18830}
+MathWorks.
+\newblock What is camera calibration.
+\newblock
+  \url{https://www.mathworks.com/help/vision/ug/camera-calibration.html}.
+
+\bibitem{wikiCameraresectioning18830}
+Wikipedia.
+\newblock Camera resectioning.
+\newblock \url{https://en.wikipedia.org/wiki/Camera_resectioning}.
+
+\bibitem{Pinholecameramodel18830}
+Wikipedia.
+\newblock Pinhole camera model.
+\newblock \url{https://en.wikipedia.org/wiki/Pinhole_camera_model}.
+
+\bibitem{wikiRotationmatrix18830}
+Wikipedia.
+\newblock Rotation matrix.
+\newblock \url{https://en.wikipedia.org/wiki/Rotation_matrix}.
+
+\bibitem{zhang2000flexible}
+Zhengyou Zhang.
+\newblock A flexible new technique for camera calibration.
+\newblock {\em IEEE Transactions on pattern analysis and machine intelligence},
+  22, 2000.
+
+\end{thebibliography}

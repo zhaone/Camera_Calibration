@@ -1,0 +1,134 @@
+\documentclass[UTF8]{ctexart}
+\usepackage{cite}   %引用
+\usepackage{url}    %引用网址
+\usepackage{geometry}   %页边距
+\usepackage{graphicx}   %图片
+\usepackage{setspace}   %行间距
+\usepackage{indentfirst} %首行缩进
+\usepackage{amsmath}
+\geometry{left=2.0cm,right=2.0cm,top=2.5cm,bottom=2.5cm}
+\renewcommand{\baselinestretch}{1.5}
+\setlength{\parindent}{2em} 
+\begin{document}
+\title{\textbf{Stereo Project Report}}
+\author{赵懿-武汉大学 网络空间安全学院}
+\maketitle
+\section{Camera Basics}
+\subsection{第一问：intrinsics, extrinsics,camera matrix}
+解释这个问题首先需要解释相机拍摄真实世界物体进行的模型。
+\subsubsection{模型}
+对于拍摄问题存在三个坐标系\cite{CameraModels18830}:
+\begin{itemize}
+  \item 世界坐标系：用于表示世界中的物体（点，线，表面等）的固定坐标系，3D
+  \item 相机坐标系：以摄像机中心为原点（光轴为Z轴）的坐标系，3D
+  \item 底片坐标系：测量图像平面中像素位置的坐标系，位于相机底片上，2D
+\end{itemize}
+拍摄过程即是对真实世界的一个点进行投影变换到底片上的过程。即世界坐标系的一个点经过投影变换到底片坐标系中的一个点。我这对模型画了一个示意图（图是自己画的有点难看）：
+\begin{figure}[htp]%%图
+	\centering  %插入的图片居中表示
+	\includegraphics[width=0.5\linewidth]{./figures/model.pdf} %插入的图，包括JPG,PNG,PDF,EPS 等，放在源文件目录下
+	\caption{投影模型}  %图片的名称
+	\label{fig:model}   %标签，用作引用
+\end{figure}\\
+在我画的模型其中：点$P$值真实世界中一点；$(x_w,y_w,z_w)$：点$P$在世界坐标系中的坐标；$(x_c,y_c,z_c)$: 点$P$在相机坐标系中的坐标；点$R$：底片中心坐标，也是相机坐标系$Z$轴（光轴）和底片相交的点；点$Q$: 点$P$在底片的投影；$(u,v)$：$Q$ 在底片坐标系中的坐标；$f$为相机焦距。\\
+显然从$P$到$Q$包含两个变换：
+\begin{figure}[htp]%%图
+	\centering  %插入的图片居中表示
+	\includegraphics[width=0.8\linewidth]{./figures/calibration_coordinate_blocks.png} %插入的图，包括JPG,PNG,PDF,EPS 等，放在源文件目录下
+	\caption{投影变换的坐标系变换\cite{MathWorks18830}}  %图片的名称
+	\label{fig:calibration_coordinate_blocks}   %标签，用作引用
+\end{figure}\\
+写成矩阵形式如下：
+\begin{equation}       %开始数学环境
+z_c \left[ \begin{array}{c}  u \\ v \\  1 \end{array} \right] =
+K \left[ \begin{array}{c|c} R & T   \end{array} \right] \left[ \begin{array}{c}   x_w \\  y_w \\  z_w \\ 1 \end{array}\right]
+\end{equation}
+\textbf{其中$K$为intrinsics matrix（也即是camera matrix），$[R|T]$ 为extrinsics matrix\cite{wikiCameraresectioning18830}。}
+\subsubsection{Extrinsics matrix的含义}
+由模型可以看出，extrinsics matrix($[R|T]$)是世界坐标点P(3D)到相机坐标点P(3D)的投影转换矩阵。真实世界点P坐标左乘$[R|T]$后得到点P在相机坐标系中的坐标值:
+\begin{align}
+ \left[ \begin{array}{c}  x_c \\ y_c \\  z_c \end{array} \right] &=
+ \left[ \begin{array}{c|c} R & T   \end{array} \right] \left[ \begin{array}{c}   x_w \\  y_w \\  z_w \\ 1 \end{array}\right]\\
+ \left[ \begin{array}{c|c} R & T   \end{array} \right] &=
+\left[ \begin{array}{ccc|c}
+r_{1,1} & r_{1,2} & r_{1,3} & t_1 \\
+r_{2,1} & r_{2,2} & r_{2,3} & t_2 \\
+r_{3,1} & r_{3,2} & r_{3,3} & t_3 \\
+\end{array} \right]
+\end{align}
+这个变换可以理解为一个坐标系的旋转和平移，其中$R$是旋转矩阵，$T$是位移向量。由线性代数的知识可以指导，两个坐标系都是3D的，所以$R$的shape是3*3，$T$的shape是3*1。关于$R$的解释我是参考的wiki\cite{wikiRotationmatrix18830}，解释得比较清楚；$T$是表示平移变换矩阵，为真实世界坐标系原点在相机坐标系中的坐标值。
+\subsubsection{Intrinsics matrix的含义}
+Intrinsics matrix K 是相机坐标点(3D)到底片坐标点(2D)的映射转换矩阵。即：
+\begin{align}
+ z_c \left[ \begin{array}{c}  u \\ v \\ 1 \end{array} \right] &=
+ K \left[ \begin{array}{c}   x_c \\  y_c \\  z_c  \end{array}\right]\\
+K &= \left [ \begin{array}{ c c c}
+f_x & s   & x_0 \\
+0  & f_y & y_0 \\
+0  & 0   & 1 \\
+\end{array} \right ]
+\end{align}
+我参考wiki\cite{Pinholecameramodel18830}看了针孔摄像机原理，参考了这篇CSDN博客\cite{CSDNJessicajiel18830}（开始一直不理解$f_x,f_y$的意义）了解了参数的意义：
+\begin{figure}[htp]%%图
+	\centering  %插入的图片居中表示
+	\includegraphics[width=0.5\linewidth]{./figures/twocor.jpg} %插入的图，包括JPG,PNG,PDF,EPS 等，放在源文件目录下
+	\caption{底片上的两个坐标系}  %图片的名称
+	\label{fig:calibration_coordinate_blocks}   %标签，用作引用
+\end{figure}\\
+上图是建立在相机底片平面上的两个坐标系。其中原点在左下角的$(u,v)$坐标系是像素坐标系，$u,v$单位为像素的宽$d_x$和高$d_y$；原点在中间的$(x,y)$坐标系是成像平面坐标系，$x,y$单位为物理意义的长度（毫米之类的），记$(x,y)$坐标系原点在$(u,v)$坐标系中的坐标为$(u_0,v_0)$。\\
+通过\cite{Pinholecameramodel18830}针孔成像原理（相似三角形）可以推出相机坐标系中点$P(x_c,y_c,z_c)$在底片成像平面坐标系中的坐标$(x_m,y_m)$：
+\begin{align}
+ z_c \left[ \begin{array}{c}  x_m \\ y_m \\ 1 \end{array} \right] =
+ M \left[ \begin{array}{c}   x_c \\  y_c \\  z_c  \end{array}\right], where: 
+ M = \left [ \begin{array}{ c c c}
+f & 0   & 0 \\
+0  & f & 0 \\
+0  & 0   & 1 \\
+\end{array} \right ]
+\end{align}
+同时，可以推出成像平面坐标系中的坐标点$(x_m,y_m)$到像素坐标系点$(u,v)$的公式：
+\begin{align}
+z_c \left[ \begin{array}{c}  u \\ v \\ 1 \end{array} \right] =
+ Q \left[ \begin{array}{c}   x_m \\  y_m \\  1  \end{array}\right], where:
+Q = \left [ \begin{array}{ c c c}
+\frac{1}{d_x} & 0   & u_0 \\
+0  & \frac{1}{d_y} & v_0 \\
+0  & 0   & 1 \\
+\end{array} \right ]
+\end{align}
+所以相机内矩阵$K$即为：
+\begin{align}
+K = QM= 
+\left [ \begin{array}{ c c c}
+f & 0   & 0 \\
+0  & f & 0 \\
+0  & 0   & 1 \\
+\end{array} \right ]
+\left [ \begin{array}{ c c c}
+\frac{1}{d_x} & 0   & u_0 \\
+0  & \frac{1}{d_y} & v_0 \\
+0  & 0   & 1 \\
+\end{array} \right ]
+=
+\left [ \begin{array}{ c c c}
+\frac{f}{d_x} & 0   & u_0 \\
+0  & \frac{f}{d_y} & v_0 \\
+0  & 0   & 1 \\
+\end{array} \right ]
+\end{align}
+\subsection{第二问：Camera Imaging}
+通过section 1.1的原理，显然：
+\begin{align*}
+K = \left [ \begin{array}{ c c c}
+f_x & 0   & c_x \\
+0  & f_y & c_y \\
+0  & 0   & 1 \\
+\end{array} \right ],
+[R|T]=(R|t), so:
+ z_c \left[ \begin{array}{c}  u \\ v \\ 1 \end{array} \right] =
+ K \left[ \begin{array}{c}   X_1 \\  X_2 \\  X_3 \\ 1  \end{array}\right]
+\end{align*}
+$(u,v)$即为$(X_1,X_2,X_3)$在image plane上的投影点。
+\bibliographystyle{plain}
+\bibliography{myreference}
+\end{document}
