@@ -9,8 +9,8 @@ cameraBasic
 │  README.md
 │  __init__.py
 │
-├─compare				#自己实现的张友正标定和openCV的结果比较
-│  ├─opencv				#以下是openCV的标定结果
+├─compare			#自己实现的张友正标定和openCV的结果比较
+│  ├─opencv			#以下是openCV的标定结果
 │  │      cameraMatirx.txt	#相机内参矩阵（3*3）
 │  │      mdisCoeffs.txt	#相机畸变系数 (k1,k2,k3,p1,p2)
 │  │      rvecs.txt		#各个图片的旋转向量
