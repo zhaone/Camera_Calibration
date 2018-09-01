@@ -27,7 +27,7 @@
 \tableofcontents
 \newpage
 \section{Camera Basics}
-\subsection{第一问：intrinsics, extrinsics,camera matrix}
+\subsection{第一问：intrinsics, extrinsics, camera matrix}
 解释这个问题首先需要解释相机拍摄真实世界物体进行的模型。
 \subsubsection{模型}
 对于拍摄问题存在三个坐标系\cite{CameraModels18830}:
@@ -69,14 +69,14 @@ r_{2,1} & r_{2,2} & r_{2,3} & t_2 \\
 r_{3,1} & r_{3,2} & r_{3,3} & t_3 \\
 \end{array} \right]
 \end{align}
-这个变换可以理解为一个坐标系的旋转和平移，其中$R$是旋转矩阵，$T$是位移向量。由线性代数的知识可以指导，两个坐标系都是3D的，所以$R$的shape是3*3，$T$的shape是3*1。关于$R$的解释我是参考的wiki\cite{wikiRotationmatrix18830}，解释得比较清楚；$T$是表示平移变换矩阵，为真实世界坐标系原点在相机坐标系中的坐标值。
+这个变换可以理解为一个坐标系的旋转和平移，其中$R$是旋转矩阵，$T$是位移向量。由线性代数的知识可以指导，两个坐标系都是3D的，所以$R$的shape是3*3，$T$的shape是3*1。关于$R$的解释我是参考的wiki\cite{wikiRotationmatrix18830}，解释得比较清楚；$T$是表示平移变换矩阵，为真实世界坐标系原点在相机坐标系中的坐标值，可以理解成真实世界坐标系原点平移到相机坐标系原点的向量。
 \subsubsection{Intrinsics matrix的含义}
 Intrinsics matrix K 是相机坐标点(3D)到底片坐标点(2D)的映射转换矩阵。即：
 \begin{align}
  z_c \left[ \begin{array}{c}  u \\ v \\ 1 \end{array} \right] &=
  K \left[ \begin{array}{c}   x_c \\  y_c \\  z_c  \end{array}\right]\\
 K &= \left [ \begin{array}{ c c c}
-f_x & s   & x_0 \\
+f_x & \gamma   & x_0 \\
 0  & f_y & y_0 \\
 0  & 0   & 1 \\
 \end{array} \right ]
@@ -86,9 +86,9 @@ f_x & s   & x_0 \\
 	\centering  %插入的图片居中表示
 	\includegraphics[width=0.5\linewidth]{./figures/twocor.jpg} %插入的图，包括JPG,PNG,PDF,EPS 等，放在源文件目录下
 	\caption{底片上的两个坐标系}  %图片的名称
-	\label{fig:calibration_coordinate_blocks}   %标签，用作引用
+	\label{fig:twocor}   %标签，用作引用
 \end{figure}\\
-上图是建立在相机底片平面上的两个坐标系。其中原点在左下角的$(u,v)$坐标系是像素坐标系，$u,v$单位为像素的宽$d_x$和高$d_y$；原点在中间的$(x,y)$坐标系是成像平面坐标系，$x,y$单位为物理意义的长度（毫米之类的），记$(x,y)$坐标系原点在$(u,v)$坐标系中的坐标为$(u_0,v_0)$。\\
+图(\ref{fig:twocor})是建立在相机底片平面上的两个坐标系。其中原点在左下角的$(u,v)$坐标系是像素坐标系，$u,v$单位为像素的宽$d_x$和高$d_y$；原点在中间的$(x,y)$坐标系是成像平面坐标系，$x,y$单位为物理意义的长度（毫米之类的），记$(x,y)$坐标系原点在$(u,v)$坐标系中的坐标为$(u_0,v_0)$。\\
 通过\cite{Pinholecameramodel18830}针孔成像原理（相似三角形）可以推出相机坐标系中点$P(x_c,y_c,z_c)$在底片成像平面坐标系中的坐标$(x_m,y_m)$：
 \begin{align}
  z_c \left[ \begin{array}{c}  x_m \\ y_m \\ 1 \end{array} \right] =
@@ -146,7 +146,7 @@ $(u,v)$即为$(X_1,X_2,X_3)$在image plane上的投影点。
 给定2D的点$(u,v)$，该点在3D相机矩阵中对应的shape是一条直线。推理如下：
 设$(u,v)$在3D相机矩阵中对应的点（集）坐标为$(x,y,z)$，相机内矩阵为$K$。则有：
 $$z(u,v,1)^T=K(x,y,z)^T$$
-因为$K$为3D方阵，且其行列式$|K|=f_x*f_y*1>0, becuase f_x>0, f_y>0$，所以$K$的逆矩阵$K^{-1}$存在，则:
+因为$K$为3D方阵，且其行列式$|K|=f_x*f_y*1>0, becuase:f_x>0, f_y>0$，所以$K$的逆矩阵$K^{-1}$存在，则:
 \begin{align}
 (x,y,z)^T=zK^{-1}(u,v,1)^T=z(a,b,c)^T\label{equ:lineExpress}
 \end{align}
@@ -158,12 +158,13 @@ $$z(u,v,1)^T=K(x,y,z)^T$$
 \begin{align}
 \frac{x}{a}=\frac{y}{b}=\frac{z}{c},where:(a,b,c)^T=K^{-1}(u,v,1)\label{formula:pixel2camera3D}
 \end{align}
-\#emmm，抱歉老师，我没推出来为什么$a,b,c\neq0$
+\#我没推出来为什么$a,b,c\neq0$，为0的话有可能对应一个平面
 \subsection{第四问：Distortion，相机畸变}
-\#理解相机的畸变主要参考了这篇CSDN的博客\cite{CSDNJessicajiel18830}。\\
-畸变（distortion）是对直线投影（rectilinear projection）的一种偏移。相机的畸变简单来说就是真实世界找那个一条直线投影到图片上不能保持为一条直线了。相机畸变主要包括两种类型：
-\begin{description}
-  \item[径向畸变] 这种畸变来自于透镜形状。对某些透镜，该现象是由于光线在远离透镜中心的地方比靠近中心的地方更加弯曲，产生“筒形”或“鱼眼”形成的。一般来讲，成像仪中心的径向畸变为0，越向边缘移动，畸变越严重。对于这种畸变，可以通过泰勒展开式矫正：
+\#理解相机的畸变主要参考了这篇CSDN的博客\cite{CSDNJessicajiel18830}。
+畸变（distortion）是对直线投影（rectilinear projection）的一种偏移。相机的畸变简单来说就是真实世界中一条直线投影到图片上不能保持为一条直线了。相机畸变主要包括两种类型：
+\begin{itemize}
+  \item \textbf{径向畸变} \\
+  这种畸变来自于透镜形状。对某些透镜，该现象是由于光线在远离透镜中心的地方比靠近中心的地方更加弯曲，产生“筒形”或“鱼眼”形成的。一般来讲，成像仪中心的径向畸变为0，越向边缘移动，畸变越严重。对于这种畸变，可以通过泰勒展开式矫正：
   $$
   x''=x'(1+k_1r^2+k_2r^4),
   y''=y'(1+k_1r^2+k_2r^4),
@@ -177,7 +178,7 @@ $$z(u,v,1)^T=K(x,y,z)^T$$
   where:r=x'^2+y'^2
   $$
   以上公式中的符号定义与径向畸变相同。
-\end{description}
+\end{itemize}
 同时考虑两种畸变，则纠正畸变的公式为：
 \begin{align}
   x''&=x'(1+k_1r^2+k_2r^4)+(2p_1y',p_2(r^2+2x'^2))\\
@@ -231,7 +232,7 @@ openCV去畸变实现的代码见\url{https://github.com/zhaone/ProjectStereo/bl
 \#这个写了好长时间
 \subsection{单相机深度估计可行性（自己推的）}
 给定单个标定的相机和其拍摄的图片无法获得像素点对应的深度。\\
-\textbf{推理}：给定标定相机和图片，即已知点图片像素点$Q(u,v)$，相机内参$K$，对应该图片外参$[R|T]$。由式(\ref{formula:pixel2camera3D}) 可确定点$Q$在相机3D坐标系中对应的直线$l_c$。又$[R|T]$已知，若将$[R|T]$写成其次坐标，其维度为4*4，取直线$l_c$上任一点$A(x_l,y_l,z_l,1)^T$，则其对应世界坐标系中一点$B(x_w,y_w,z_w,1)^T$=$([R|T]^{-1})$。由于$[R|T]$是一个旋转位移矩阵，其逆矩阵$([R|T])^{-1}(x_l,y_l,z_l,1)^T$也有相同的性质，所以直线$l$对应与世界坐标系中一条直线$l_w$，所以无法知道$Q(u,v)$在世界坐标系中对应点的位置，其深度也就无法得出。\\
+\textbf{推理}：给定标定相机和图片，即已知点图片像素点$Q(u,v)$，相机内参$K$，对应该图片外参$[R|T]$。由式(\ref{formula:pixel2camera3D}) 可确定点$Q$在相机3D坐标系中对应的直线$l_c$。又$[R|T]$已知，若将$[R|T]$写成其次坐标，其维度为4*4，取直线$l_c$上任一点$A(x_l,y_l,z_l,1)^T$，则其对应世界坐标系中一点$B(x_w,y_w,z_w,1)^T=([R|T]^{-1})(x_l,y_l,z_l,1)^T$。由于$[R|T]$是一个旋转位移矩阵，其逆矩阵$([R|T])^{-1}$也有相同的性质，所以直线$l$对应与世界坐标系中一条直线$l_w$，所以无法知道$Q(u,v)$在世界坐标系中对应点的位置，其深度也就无法得出。\\
 \textbf{解决方案}：两条直线可以相交于一点。可以使用两台标定好的相机对同一场景图片中反映的真实世界同一点$Q$做上述推理变换，得到真实世界$l_1,l_2$ 得到两条直线，解出两直线交点$P$即可。不过我觉得要通过一些条件限制保证两条$l_1,l_2$在同一平面有交点。
 \section{Binocular Basics}
 待补充
