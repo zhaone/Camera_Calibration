@@ -17,7 +17,7 @@ cameraBasic
 │  │      tvecs.txt		#各个图片的位移向量
 │  │
 │  └─zhang
-│          cameraMatirx.txt	#以下是openCV的标定结果
+│          cameraMatirx.txt	#以下是自己实现的张友正标定结果
 │          mdisCoeffs.txt	#相机内参矩阵（3*3）
 │          rvecs.txt		#相机畸变系数 (k1,k2,0,0,0)
 │          tvecs.txt		#各个图片的位移向量
