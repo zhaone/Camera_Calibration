@@ -67,9 +67,9 @@ def cv_calibrate(imagePoints,objectCorners,imageSize):
 def undistort(filelist,cameraMatirx,disCoeffs):
     for file in filelist:
         image=cv.imread(file)
-        cv.imshow("去畸变前",image)
+        cv.imshow("before undistort",image)
         undisImage=cv.undistort(image,cameraMatirx,disCoeffs)
-        cv.imshow("去畸变后", undisImage)
+        cv.imshow("after undistort", undisImage)
         cv.waitKey(-1)
 # 保存标定参数
 # 输入：

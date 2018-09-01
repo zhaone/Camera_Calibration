@@ -38,17 +38,14 @@ cameraBasic
 └─__pycache__
 ```
 ## 程序使用方法
+>**可以将`cemeraBasicMain`中第9行`DEBUG`变量设为1，这时只用运行`cemeraBasicMain.py`，默认选择`.img/left`文件夹中的图片，boardSize取(6,9)**
 1. 直接运行`cemeraBasicMain`，弹出选择文件夹框，如图所示
 ![image](https://github.com/zhaone/ProjectStereo/blob/master/show/selectFloder.jpg)
 2. 选择文件夹后，命令行输入棋盘格size：
 ![image](https://github.com/zhaone/ProjectStereo/blob/master/show/inputBoardsize.jpg)
 3. 程序会自动运行openCV的API实现的标定以及我自己实现的张友正标定
 4. 运行中会弹出每张图片原图和去畸变之后的图像，按任意键切换到下一张图像
-![image](https://github.com/zhaone/ProjectStereo/blob/master/show/undisort.jpg)
+![image](https://github.com/zhaone/ProjectStereo/blob/master/show/undistort.jpg)
 5. 程序自动将两种方法实现的相机内参、畸变系数以及每张图片的旋转向量、位移向量保存到上述的txt文件中
->**也可以将`cemeraBasicMain`中第9行`DEBUG`变量设为1，这是只用运行`cemeraBasicMain.py`，默认选择`.img/left`文件夹中的图片**
 ## 联系我
 * 邮件：smzhgle@gmail.com
-
-
-

@@ -5,10 +5,13 @@
 \usepackage{graphicx}   %图片
 \usepackage{setspace}   %行间距
 \usepackage{indentfirst} %首行缩进
-\usepackage{amsmath}
+\usepackage{amsmath}    %数学
+\usepackage{appendix}   %附录
+\usepackage{multirow}   %表格多行
+\usepackage{booktabs}
 \geometry{left=2.0cm,right=2.0cm,top=2.5cm,bottom=2.5cm}
 \renewcommand{\baselinestretch}{1.5}
-\setlength{\parindent}{2em} 
+\setlength{\parindent}{2em}
 \begin{document}
 \title{\textbf{Stereo Project Report}}
 \author{赵懿-武汉大学 网络空间安全学院}
@@ -23,7 +26,7 @@
   \item 相机坐标系：以摄像机中心为原点（光轴为Z轴）的坐标系，3D
   \item 底片坐标系：测量图像平面中像素位置的坐标系，位于相机底片上，2D
 \end{itemize}
-拍摄过程即是对真实世界的一个点进行投影变换到底片上的过程。即世界坐标系的一个点经过投影变换到底片坐标系中的一个点。我这对模型画了一个示意图（图是自己画的有点难看）：
+拍摄过程即是对真实世界的一个点进行投影变换到底片上的过程。即世界坐标系的一个点经过投影变换到底片坐标系中的一个点。我这对模型画了一个示意图（\#图是自己画的有点难看）：
 \begin{figure}[htp]%%图
 	\centering  %插入的图片居中表示
 	\includegraphics[width=0.5\linewidth]{./figures/model.pdf} %插入的图，包括JPG,PNG,PDF,EPS 等，放在源文件目录下
@@ -79,7 +82,7 @@ f_x & s   & x_0 \\
 通过\cite{Pinholecameramodel18830}针孔成像原理（相似三角形）可以推出相机坐标系中点$P(x_c,y_c,z_c)$在底片成像平面坐标系中的坐标$(x_m,y_m)$：
 \begin{align}
  z_c \left[ \begin{array}{c}  x_m \\ y_m \\ 1 \end{array} \right] =
- M \left[ \begin{array}{c}   x_c \\  y_c \\  z_c  \end{array}\right], where: 
+ M \left[ \begin{array}{c}   x_c \\  y_c \\  z_c  \end{array}\right], where:
  M = \left [ \begin{array}{ c c c}
 f & 0   & 0 \\
 0  & f & 0 \\
@@ -98,7 +101,7 @@ Q = \left [ \begin{array}{ c c c}
 \end{align}
 所以相机内矩阵$K$即为：
 \begin{align}
-K = QM= 
+K = QM=
 \left [ \begin{array}{ c c c}
 f & 0   & 0 \\
 0  & f & 0 \\
@@ -116,7 +119,7 @@ f & 0   & 0 \\
 0  & 0   & 1 \\
 \end{array} \right ]
 \end{align}
-\subsection{第二问：Camera Imaging}
+\subsection{第二问：3D到2D（自己推的）}
 通过section 1.1的原理，显然：
 \begin{align*}
 K = \left [ \begin{array}{ c c c}
@@ -129,6 +132,151 @@ f_x & 0   & c_x \\
  K \left[ \begin{array}{c}   X_1 \\  X_2 \\  X_3 \\ 1  \end{array}\right]
 \end{align*}
 $(u,v)$即为$(X_1,X_2,X_3)$在image plane上的投影点。
+\subsection{第三问：2D到3D（自己推的）}
+给定2D的点$(u,v)$，该点在3D相机矩阵中对应的shape是一条直线。推理如下：
+设$(u,v)$在3D相机矩阵中对应的点（集）坐标为$(x,y,z)$，相机内矩阵为$K$。则有：
+$$z(u,v,1)^T=K(x,y,z)^T$$
+因为$K$为3D方阵，且其行列式$|K|=f_x*f_y*1>0, becuase f_x>0, f_y>0$，所以$K$的逆矩阵$K^{-1}$存在，则:
+\begin{align}
+(x,y,z)^T=zK^{-1}(u,v,1)^T=z(a,b,c)^T\label{equ:lineExpress}
+\end{align}
+现在1.给定$u,v$，2.$K$不随$u,v$变化，为确定值，则上式中$a,b,c$为确定值，$z$未知。所以在相机矩阵中，在
+\begin{align}
+\frac{x}{a}=\frac{y}{b}=\frac{z}{c}
+\end{align}
+直线上的点都满足(\ref{equ:lineExpress})式。所以，2D点$(u,v)$对应3D相机中形状$(x,y,z)$的公式为：
+\begin{align}
+\frac{x}{a}=\frac{y}{b}=\frac{z}{c},where:(a,b,c)^T=K^{-1}(u,v,1)
+\end{align}
+\#emmm，抱歉老师，我没推出来为什么$a,b,c\neq0$
+\subsection{第四问：Distortion，相机畸变}
+\#理解相机的畸变主要参考了这篇CSDN的博客\cite{CSDNJessicajiel18830}。\\
+畸变（distortion）是对直线投影（rectilinear projection）的一种偏移。相机的畸变简单来说就是真实世界找那个一条直线投影到图片上不能保持为一条直线了。相机畸变主要包括两种类型：
+\begin{description}
+  \item[径向畸变] 这种畸变来自于透镜形状。对某些透镜，该现象是由于光线在远离透镜中心的地方比靠近中心的地方更加弯曲，产生“筒形”或“鱼眼”形成的。一般来讲，成像仪中心的径向畸变为0，越向边缘移动，畸变越严重。对于这种畸变，可以通过泰勒展开式矫正：
+  $$
+  x''=x'(1+k_1r^2+k_2r^4),
+  y''=y'(1+k_1r^2+k_2r^4),
+  where:r=x'^2+y'^2
+  $$
+  其中$(x'',y'')$是矫正后的理想（无畸变）坐标，$(x',y')$是存在畸变的真实相机坐标系找那个坐标。我对上式的理解是，由于随着$r$增大，该类型畸变越严重，所以上面的矫正方法也是$r$越大，矫正力度越大。
+  \item[切向畸变] 当成像仪被粘贴在摄像机的时候，会存在一定的误差，使得图像平面和透镜不完全平行，从而产生切向畸变。也就是说，如果一个矩形被投影到成像仪上时，可能会变成一个梯形。对于这种畸变，可以以下公式来矫正：
+  $$
+  x''=x'+(2p_1y',p_2(r^2+2x'^2)),
+  y''=y'+(2p_1x',p_2(r^2+2y'^2)),
+  where:r=x'^2+y'^2
+  $$
+  以上公式中的符号定义与径向畸变相同。
+\end{description}
+同时考虑两种畸变，则纠正畸变的公式为：
+\begin{align}
+  x''&=x'(1+k_1r^2+k_2r^4)+(2p_1y',p_2(r^2+2x'^2))\\
+  y''&=y'(1+k_1r^2+k_2r^4)+(2p_1x',p_2(r^2+2y'^2))
+\end{align}
+以上公式中的符号定义与径向畸变相同。
+\subsection{第五问：Calibration相机标定}
+像机标定主要是求出相机的内、外参数，以及畸变参数。其主要步骤是\cite{zhang2000flexible}：
+\begin{enumerate}
+  \item 打印一张棋盘格贴到一个平面上
+  \item 移动平面或摄像机，从不同方向拍摄多张模板平面的图像
+  \item 从图像中检测特征点
+  \item 在不考虑畸变的情况下，估计相机内矩阵的5个参数和每幅图片的外参
+  \item 用相机内矩阵和外参估计畸变参数
+  \item 通过极大似然估计优化以上求出的参数
+\end{enumerate}
+\subsection{第六问：openCV相机标定}
+openCV相机标定实现的代码见\url{https://github.com/zhaone/ProjectStereo/blob/master/cameraBasic/cemeraBasicMain.py}。主要的步骤：
+\begin{enumerate}
+  \item \verb"getFilelist()"：获得进行图片文件和boradSize
+  \item \verb"findPoints()"：用API \verb"findChessboardCorners()"和\verb"cornerSubPix()"获得图片中棋盘格角点坐标，同时设置角点在真实世界中的坐标（该坐标系$z=0$平面在棋盘格平面上）。
+  \item \verb"cv_calibrate()"：用API \verb"calibrateCamera()"进行标定，获得相机内参、畸变系数、旋转向量、位移向量
+\end{enumerate}
+\#实现这个程序主要参考了\cite{opencvCameraCalibrationl18830}的官方API
+\subsection{第七问：openCV去畸变 undistort}
+openCV去畸变实现的代码见\url{https://github.com/zhaone/ProjectStereo/blob/master/cameraBasic/cemeraBasicMain.py}中的undistort函数，主要采用了openCV的\verb"cv.undistort()"函数。去畸变效果如图(\ref{fig:distort})所示（效果还不错）。
+\begin{figure}[htp]%%图
+	\centering  %插入的图片居中表示
+	\includegraphics[width=0.6\linewidth]{./figures/undistort.jpg} %插入的图，包括JPG,PNG,PDF,EPS 等，放在源文件目录下
+	\caption{去畸变前后效果}  %图片的名称
+	\label{fig:distort}   %标签，用作引用
+\end{figure}\\
+\subsection{第八问：张友正标定的实现}
+我自己实现的张友正标定程序见\url{https://github.com/zhaone/ProjectStereo/blob/master/cameraBasic/calImpZhang.py}。实现的数学原理参考了\cite{zhang2000flexible}，特别是附录里面的算法。程序主要包括：
+\begin{description}
+  \item[homographys()] 计算单应矩阵
+  \item[getV()] 计算\cite{zhang2000flexible}中Section 3.1中的$V$矩阵
+  \item[getCameraMatrix()] 计算相机内参矩阵
+  \item[getRtvecs()] 计算每幅图片的旋转矩阵和位移向量
+  \item[getDisCoeffs()] 计算畸变系数，只考虑了$k_1,k_2$
+  \item[ramt2rvecs()] 将旋转矩阵转化为旋转向量（为了和openCV API输出一致比较，这个函数用了openCV的API
+  \item[zhangCalibrateCamera()] 标定总流程
+\end{description}
+具体的实现方法都是按照\cite{zhang2000flexible}paper中的公式实现的，不过最后没有用最小二乘法迭代优化。我自己实现的张友正标定效果和openCV的API效果比较见附录\ref{appendices:A}。\\
+可以看到，我自己实现的张友正标定得到的camera Matrix和openCV的出的结果差别不大，位移向量和
+\begin{appendices}
+\section{附录}\label{appendices:A}
+% Table generated by Excel2LaTeX from sheet 'Sheet1'
+\begin{table}[htbp]
+  \centering
+  \caption{openCV和自己实现的方法结果比较}
+    \begin{tabular}{|c|r|r|r|r|r|r|}
+    \toprule[2pt]
+          & \multicolumn{3}{|c|}{\textbf{OpenCV}} & \multicolumn{3}{|c|}{\textbf{Self Implement}} \\
+    \bottomrule[2pt]
+    \toprule[1pt]
+    \multicolumn{1}{|c|}{\multirow{3}[5]{*}{\textbf{camera matrix}}} & 532.827 & 0     & 342.486 & 543.50163 & -4.237409 & 357.191875 \\
+\cmidrule{2-7}          & 0     & 532.945 & 233.855 & 0     & 545.78158 & 235.08919 \\
+\cmidrule{2-7}          & 0     & 0     & 1     & 0     & 0     & 1 \\
+    \bottomrule[1pt]
+    \toprule[1pt]
+    \multirow{13}[26]{*}{\textbf{rvecs}} & -0.084627 & 0.3453051 & -1.543025 & -0.067938 & 0.2583436 & -1.5570806 \\
+\cmidrule{2-7}          & -0.22738 & 1.0244723 & -2.792092 & -2.978611 & -0.709744 & -0.7026674 \\
+\cmidrule{2-7}          & -0.349252 & -0.069653 & -1.200653 & 0.6233055 & -0.384735 & -2.0363102 \\
+\cmidrule{2-7}          & -0.276421 & 0.0970042 & -1.563284 & -0.173886 & -0.503776 & -2.987277 \\
+\cmidrule{2-7}          & -0.476413 & 0.0885465 & -0.225949 & 0.1318448 & -0.482891 & -1.5052072 \\
+\cmidrule{2-7}          & 0.0621603 & 0.4465449 & 0.107134 & 0.2589092 & -0.170135 & 1.54422695 \\
+\cmidrule{2-7}          & -0.104693 & 0.3177094 & 0.314246 & 0.4640564 & -0.162215 & 1.52179571 \\
+\cmidrule{2-7}          & -0.356238 & 0.2402072 & 0.209317 & -0.475752 & 0.044344 & 0.2511271 \\
+\cmidrule{2-7}          & 0.4812064 & -0.173949 & -1.406844 & 0.5352236 & 0.7207306 & -2.3915298 \\
+\cmidrule{2-7}          & 0.0494733 & -0.60134 & -0.183568 & 0.5986967 & -0.088322 & -1.4785658 \\
+\cmidrule{2-7}          & -0.377069 & 0.0683159 & -0.019444 & -0.339023 & 0.1098992 & -0.0330621 \\
+\cmidrule{2-7}          & 0.4974412 & 0.1197422 & -0.296026 & 0.6618053 & 0.4031866 & -0.2198149 \\
+\cmidrule{2-7}          & 0.1933082 & -0.420165 & -0.19427 & 0.3631638 & -0.250878 & -0.1428785 \\
+    \bottomrule[1pt]
+    \toprule[1pt]
+    \multirow{13}[26]{*}{\textbf{tvecs}} & -3.91978 & 1.5759185 & 17.15951 & -4.409501 & 1.5567137 & 17.4500936 \\
+\cmidrule{2-7}          & 3.4192304 & 5.2865887 & 14.22006 & 3.0608411 & 5.222831 & 14.8762691 \\
+\cmidrule{2-7}          & -4.718518 & 1.108129 & 11.47173 & -4.960351 & 1.0878467 & 11.4622953 \\
+\cmidrule{2-7}          & -4.98153 & 3.3264306 & 12.71391 & -5.287045 & 3.2865817 & 13.1606797 \\
+\cmidrule{2-7}          & -3.686437 & -4.020144 & 13.28904 & -4.08676 & -4.020437 & 13.6411581 \\
+\cmidrule{2-7}          & 1.3962968 & -4.271462 & 15.85035 & 0.9631481 & -4.495755 & 16.7796074 \\
+\cmidrule{2-7}          & -4.315564 & -5.489637 & 17.48175 & -4.640167 & -5.240114 & 17.3780545 \\
+\cmidrule{2-7}          & -2.301478 & -5.350052 & 14.52772 & -2.732646 & -5.294209 & 14.8935799 \\
+\cmidrule{2-7}          & -4.575739 & 2.5409072 & 11.62056 & -4.904191 & 2.5232139 & 12.0795987 \\
+\cmidrule{2-7}          & -3.138365 & -4.262156 & 10.01088 & -3.481912 & -4.275332 & 10.559435 \\
+\cmidrule{2-7}          & -3.966455 & -4.802239 & 13.57548 & -4.372979 & -4.768601 & 14.0972409 \\
+\cmidrule{2-7}          & -4.666377 & -2.953178 & 12.22287 & -5.014534 & -2.949935 & 12.6544459 \\
+\cmidrule{2-7}          & -3.721262 & -3.893277 & 9.904011 & -4.082615 & -3.926067 & 10.541913 \\
+    \bottomrule[2pt]
+    \end{tabular}%
+  \label{tab:camAndRt}%
+\end{table}%
+% Table generated by Excel2LaTeX from sheet 'Sheet1'
+\begin{table}[htbp]
+  \centering
+  \caption{openCV和自己实现的方法畸变系数比较}
+    \begin{tabular}{lccccc}
+    \toprule
+          & \multicolumn{1}{c}{$k_1$} & \multicolumn{1}{c}{$k_2$} & \multicolumn{1}{c}{$k_3$} & \multicolumn{1}{c}{$p_1$} & \multicolumn{1}{c}{$p_2$} \\
+    \midrule
+    openCV  & -0.2808809 & 0.02517166 & 0.0012166 & -0.0001355 & 0.1634489 \\
+    \midrule
+    Slef Implement & 0.0020839 & -2.667E-05 & 0     & 0     & 0 \\
+    \bottomrule
+    \end{tabular}%
+  \label{tab:addlabel}%
+\end{table}%
+\end{appendices}
 \bibliographystyle{plain}
 \bibliography{myreference}
 \end{document}

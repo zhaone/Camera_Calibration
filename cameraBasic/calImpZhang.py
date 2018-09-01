@@ -2,6 +2,7 @@
 # 张氏标定方法实现
 
 # BUG：畸变系数计算得不太准确^_^|||
+#      最后没有用最小二乘法对参数进行迭代优化
 import cv2 as cv
 import numpy as np
 import math

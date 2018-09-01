@@ -5,14 +5,27 @@
 \usepackage{graphicx}   %图片
 \usepackage{setspace}   %行间距
 \usepackage{indentfirst} %首行缩进
-\usepackage{amsmath}
+\usepackage{amsmath}    %数学
+\usepackage{appendix}   %附录
+\usepackage{multirow}   %表格多行
+\usepackage{booktabs}
+\usepackage{enumitem}
 \geometry{left=2.0cm,right=2.0cm,top=2.5cm,bottom=2.5cm}
 \renewcommand{\baselinestretch}{1.5}
-\setlength{\parindent}{2em} 
+%调整列表间距
+\setlength{\parindent}{2em}
+\setenumerate[1]{itemsep=0pt,partopsep=0pt,parsep=\parskip,topsep=5pt}
+\setitemize[1]{itemsep=0pt,partopsep=0pt,parsep=\parskip,topsep=5pt}
+\setdescription{itemsep=0pt,partopsep=0pt,parsep=\parskip,topsep=5pt}
 \begin{document}
-\title{\textbf{Stereo Project Report}}
-\author{赵懿-武汉大学 网络空间安全学院}
+\title{Stereo Project Report}
+\author{赵懿-武汉大学 网络空间安全学院\\
+邮箱:\textit{yizhaowhu@whu.edu.cn}\\
+项目github地址:\url{https://github.com/zhaone/ProjectStereo}}
 \maketitle
+\newpage
+\tableofcontents
+\newpage
 \section{Camera Basics}
 \subsection{第一问：intrinsics, extrinsics,camera matrix}
 解释这个问题首先需要解释相机拍摄真实世界物体进行的模型。
@@ -31,10 +44,10 @@
 	\label{fig:model}   %标签，用作引用
 \end{figure}\\
 在我画的模型其中：点$P$值真实世界中一点；$(x_w,y_w,z_w)$：点$P$在世界坐标系中的坐标；$(x_c,y_c,z_c)$: 点$P$在相机坐标系中的坐标；点$R$：底片中心坐标，也是相机坐标系$Z$轴（光轴）和底片相交的点；点$Q$: 点$P$在底片的投影；$(u,v)$：$Q$ 在底片坐标系中的坐标；$f$为相机焦距。\\
-显然从$P$到$Q$包含两个变换：
-\begin{figure}[htp]%%图
+图(\ref{fig:calibration_coordinate_blocks})显示了从$P$到$Q$包含两个变换：
+\begin{figure}[htpd]%%图
 	\centering  %插入的图片居中表示
-	\includegraphics[width=0.8\linewidth]{./figures/calibration_coordinate_blocks.png} %插入的图，包括JPG,PNG,PDF,EPS 等，放在源文件目录下
+	\includegraphics[width=0.5\linewidth]{./figures/calibration_coordinate_blocks.png} %插入的图，包括JPG,PNG,PDF,EPS 等，放在源文件目录下
 	\caption{投影变换的坐标系变换\cite{MathWorks18830}}  %图片的名称
 	\label{fig:calibration_coordinate_blocks}   %标签，用作引用
 \end{figure}\\
@@ -79,7 +92,7 @@ f_x & s   & x_0 \\
 通过\cite{Pinholecameramodel18830}针孔成像原理（相似三角形）可以推出相机坐标系中点$P(x_c,y_c,z_c)$在底片成像平面坐标系中的坐标$(x_m,y_m)$：
 \begin{align}
  z_c \left[ \begin{array}{c}  x_m \\ y_m \\ 1 \end{array} \right] =
- M \left[ \begin{array}{c}   x_c \\  y_c \\  z_c  \end{array}\right], where: 
+ M \left[ \begin{array}{c}   x_c \\  y_c \\  z_c  \end{array}\right], where:
  M = \left [ \begin{array}{ c c c}
 f & 0   & 0 \\
 0  & f & 0 \\
@@ -98,7 +111,7 @@ Q = \left [ \begin{array}{ c c c}
 \end{align}
 所以相机内矩阵$K$即为：
 \begin{align}
-K = QM= 
+K = QM=
 \left [ \begin{array}{ c c c}
 f & 0   & 0 \\
 0  & f & 0 \\
@@ -143,7 +156,7 @@ $$z(u,v,1)^T=K(x,y,z)^T$$
 \end{align}
 直线上的点都满足(\ref{equ:lineExpress})式。所以，2D点$(u,v)$对应3D相机中形状$(x,y,z)$的公式为：
 \begin{align}
-\frac{x}{a}=\frac{y}{b}=\frac{z}{c},where:(a,b,c)^T=K^{-1}(u,v,1)
+\frac{x}{a}=\frac{y}{b}=\frac{z}{c},where:(a,b,c)^T=K^{-1}(u,v,1)\label{formula:pixel2camera3D}
 \end{align}
 \#emmm，抱歉老师，我没推出来为什么$a,b,c\neq0$
 \subsection{第四问：Distortion，相机畸变}
@@ -182,8 +195,113 @@ $$z(u,v,1)^T=K(x,y,z)^T$$
   \item 通过极大似然估计优化以上求出的参数
 \end{enumerate}
 \subsection{第六问：openCV相机标定}
-#实现这个程序主要参考了\cite{opencvCameraCalibrationl18830}的官方API
-实现的代码
+openCV相机标定实现的代码见\url{https://github.com/zhaone/ProjectStereo/blob/master/cameraBasic/cemeraBasicMain.py}。主要的步骤：
+\begin{enumerate}
+  \item \verb"getFilelist()"：获得进行图片文件和boradSize
+  \item \verb"findPoints()"：用API \verb"findChessboardCorners()"和\verb"cornerSubPix()"获得图片中棋盘格角点坐标，同时设置角点在真实世界中的坐标（该坐标系$z=0$平面在棋盘格平面上）。
+  \item \verb"cv_calibrate()"：用API \verb"calibrateCamera()"进行标定，获得相机内参、畸变系数、旋转向量、位移向量
+\end{enumerate}
+\#实现这个程序主要参考了\cite{opencvCameraCalibrationl18830}的官方API
+\subsection{第七问：openCV去畸变 undistort}
+openCV去畸变实现的代码见\url{https://github.com/zhaone/ProjectStereo/blob/master/cameraBasic/cemeraBasicMain.py}中的undistort函数，主要采用了openCV的\verb"cv.undistort()"函数。去畸变效果如图(\ref{fig:distort})所示（效果还不错）。
+\begin{figure}[htp]%%图
+	\centering  %插入的图片居中表示
+	\includegraphics[width=0.9\linewidth]{./figures/undistort.jpg} %插入的图，包括JPG,PNG,PDF,EPS 等，放在源文件目录下
+	\caption{去畸变前后效果}  %图片的名称
+	\label{fig:distort}   %标签，用作引用
+\end{figure}\\
+\subsection{第八问：张友正标定的实现（自己写的）}
+我自己实现的张友正标定程序见\url{https://github.com/zhaone/ProjectStereo/blob/master/cameraBasic/calImpZhang.py}。实现的数学原理参考了\cite{zhang2000flexible}，特别是附录里面的算法。程序主要包括：
+\begin{enumerate}
+  \item \verb"homographys()" 计算单应矩阵
+  \item \verb"getV()" 计算\cite{zhang2000flexible}中Section 3.1中的$V$矩阵
+  \item \verb"getCameraMatrix()" 计算相机内参矩阵
+  \item \verb"getRtvecs()" 计算每幅图片的旋转矩阵和位移向量
+  \item \verb"getDisCoeffs()" 计算畸变系数，只考虑了$k_1,k_2$
+  \item \verb"ramt2rvecs()" 将旋转矩阵转化为旋转向量（为了和openCV输出一致便于比较）
+  \item \verb"zhangCalibrateCamera()" 标定总流程
+\end{enumerate}
+具体的实现方法都是按照paper\cite{zhang2000flexible}中的公式实现的，不过最后没有用最小二乘法迭代优化，代码实现的细节可以在github代码注释中看到。我自己实现的张友正标定效果和openCV的API 效果比较见附录\ref{appendices:A}。可以看到，\textbf{我自己实现的张友正标定得到的相机内参camera Matrix，位移向量tvecs和旋转向量tvecs与openCV的出的结果差别不大，但是畸变系数和openCV 的结果有些差距}。我仔细检查了代码的\verb"getDisCoeffs()"函数和调试的中间结果，计算$k_1,k_2$的代码应该是没有错误。导致$k_1,k_2$ 与openCV 计算出的结果差别较大的原因我想可能有三个：
+\begin{enumerate}
+  \item paper\cite{zhang2000flexible}中只考虑了$k_1,k_2$，忽略了$k_3,p_1,p_2$等参数
+  \item 我得出的camera matrix中比openCV的camera matrix多了一个$\gamma$参数，可能会对结果造成影响
+  \item 没有最后的最小二乘法的优化步骤
+\end{enumerate}
+其中3的肯能性应该比较小，因为我的结果和openCV的结果有数量级的差别。下一步我会排查下原因进行改进，另外最后用最小二乘法对参数进行优化。\\
+\#这个写了好长时间
+\subsection{单相机深度估计可行性（自己推的）}
+给定单个标定的相机和其拍摄的图片无法获得像素点对应的深度。\\
+\textbf{推理}：给定标定相机和图片，即已知点图片像素点$Q(u,v)$，相机内参$K$，对应该图片外参$[R|T]$。由式(\ref{formula:pixel2camera3D}) 可确定点$Q$在相机3D坐标系中对应的直线$l_c$。又$[R|T]$已知，若将$[R|T]$写成其次坐标，其维度为4*4，取直线$l_c$上任一点$A(x_l,y_l,z_l,1)^T$，则其对应世界坐标系中一点$B(x_w,y_w,z_w,1)^T$=$([R|T]^{-1})$。由于$[R|T]$是一个旋转位移矩阵，其逆矩阵$([R|T])^{-1}(x_l,y_l,z_l,1)^T$也有相同的性质，所以直线$l$对应与世界坐标系中一条直线$l_w$，所以无法知道$Q(u,v)$在世界坐标系中对应点的位置，其深度也就无法得出。\\
+\textbf{解决方案}：两条直线可以相交于一点。可以使用两台标定好的相机对同一场景图片中反映的真实世界同一点$Q$做上述推理变换，得到真实世界$l_1,l_2$ 得到两条直线，解出两直线交点$P$即可。不过我觉得要通过一些条件限制保证两条$l_1,l_2$在同一平面有交点。
+\section{Binocular Basics}
+待补充
+\section{Stereo Matching}
+待补充
 \bibliographystyle{plain}
 \bibliography{myreference}
+\begin{appendices}
+\section{附录：相机标定openCV与自己实现结果比较}\label{appendices:A}
+% Table generated by Excel2LaTeX from sheet 'Sheet1'
+\begin{table}[htbp]
+  \centering
+  \caption{openCV和自己实现的方法畸变系数比较}
+    \begin{tabular}{lccccc}
+    \toprule
+          & \multicolumn{1}{c}{$k_1$} & \multicolumn{1}{c}{$k_2$} & \multicolumn{1}{c}{$k_3$} & \multicolumn{1}{c}{$p_1$} & \multicolumn{1}{c}{$p_2$} \\
+    \midrule
+    openCV  & -0.2808809 & 0.02517166 & 0.0012166 & -0.0001355 & 0.1634489 \\
+    \midrule
+    Slef Implement & 0.0020839 & -2.667E-05 & 0     & 0     & 0 \\
+    \bottomrule
+    \end{tabular}%
+  \label{tab:distort}%
+\end{table}%
+% Table generated by Excel2LaTeX from sheet 'Sheet1'
+\begin{table}[htbp]
+  \centering
+  \caption{openCV和自己实现的方法结果比较}
+    \begin{tabular}{|c|r|r|r|r|r|r|}
+    \toprule[2pt]
+          & \multicolumn{3}{|c|}{\textbf{OpenCV}} & \multicolumn{3}{|c|}{\textbf{Self Implement}} \\
+    \bottomrule[2pt]
+    \toprule[1pt]
+    \multicolumn{1}{|c|}{\multirow{3}[5]{*}{\textbf{camera matrix}}} & 532.827 & 0     & 342.486 & 543.50163 & -4.237409 & 357.191875 \\
+\cmidrule{2-7}          & 0     & 532.945 & 233.855 & 0     & 545.78158 & 235.08919 \\
+\cmidrule{2-7}          & 0     & 0     & 1     & 0     & 0     & 1 \\
+    \bottomrule[1pt]
+    \toprule[1pt]
+    \multirow{13}[26]{*}{\textbf{tvecs}} & -3.91978 & 1.5759185 & 17.15951 & -4.409501 & 1.5567137 & 17.4500936 \\
+\cmidrule{2-7}          & 3.4192304 & 5.2865887 & 14.22006 & 3.0608411 & 5.222831 & 14.8762691 \\
+\cmidrule{2-7}          & -4.718518 & 1.108129 & 11.47173 & -4.960351 & 1.0878467 & 11.4622953 \\
+\cmidrule{2-7}          & -4.98153 & 3.3264306 & 12.71391 & -5.287045 & 3.2865817 & 13.1606797 \\
+\cmidrule{2-7}          & -3.686437 & -4.020144 & 13.28904 & -4.08676 & -4.020437 & 13.6411581 \\
+\cmidrule{2-7}          & 1.3962968 & -4.271462 & 15.85035 & 0.9631481 & -4.495755 & 16.7796074 \\
+\cmidrule{2-7}          & -4.315564 & -5.489637 & 17.48175 & -4.640167 & -5.240114 & 17.3780545 \\
+\cmidrule{2-7}          & -2.301478 & -5.350052 & 14.52772 & -2.732646 & -5.294209 & 14.8935799 \\
+\cmidrule{2-7}          & -4.575739 & 2.5409072 & 11.62056 & -4.904191 & 2.5232139 & 12.0795987 \\
+\cmidrule{2-7}          & -3.138365 & -4.262156 & 10.01088 & -3.481912 & -4.275332 & 10.559435 \\
+\cmidrule{2-7}          & -3.966455 & -4.802239 & 13.57548 & -4.372979 & -4.768601 & 14.0972409 \\
+\cmidrule{2-7}          & -4.666377 & -2.953178 & 12.22287 & -5.014534 & -2.949935 & 12.6544459 \\
+\cmidrule{2-7}          & -3.721262 & -3.893277 & 9.904011 & -4.082615 & -3.926067 & 10.541913 \\
+\bottomrule[1pt]
+    \toprule[1pt]
+    \multirow{13}[26]{*}{\textbf{rvecs}} & -0.084627 & 0.3453051 & -1.543025 & -0.067938 & 0.2583436 & -1.5570806 \\
+\cmidrule{2-7}          & -0.22738 & 1.0244723 & -2.792092 & -2.978611 & -0.709744 & -0.7026674 \\
+\cmidrule{2-7}          & -0.349252 & -0.069653 & -1.200653 & 0.6233055 & -0.384735 & -2.0363102 \\
+\cmidrule{2-7}          & -0.276421 & 0.0970042 & -1.563284 & -0.173886 & -0.503776 & -2.987277 \\
+\cmidrule{2-7}          & -0.476413 & 0.0885465 & -0.225949 & 0.1318448 & -0.482891 & -1.5052072 \\
+\cmidrule{2-7}          & 0.0621603 & 0.4465449 & 0.107134 & 0.2589092 & -0.170135 & 1.54422695 \\
+\cmidrule{2-7}          & -0.104693 & 0.3177094 & 0.314246 & 0.4640564 & -0.162215 & 1.52179571 \\
+\cmidrule{2-7}          & -0.356238 & 0.2402072 & 0.209317 & -0.475752 & 0.044344 & 0.2511271 \\
+\cmidrule{2-7}          & 0.4812064 & -0.173949 & -1.406844 & 0.5352236 & 0.7207306 & -2.3915298 \\
+\cmidrule{2-7}          & 0.0494733 & -0.60134 & -0.183568 & 0.5986967 & -0.088322 & -1.4785658 \\
+\cmidrule{2-7}          & -0.377069 & 0.0683159 & -0.019444 & -0.339023 & 0.1098992 & -0.0330621 \\
+\cmidrule{2-7}          & 0.4974412 & 0.1197422 & -0.296026 & 0.6618053 & 0.4031866 & -0.2198149 \\
+\cmidrule{2-7}          & 0.1933082 & -0.420165 & -0.19427 & 0.3631638 & -0.250878 & -0.1428785 \\
+    \bottomrule[2pt]
+    \end{tabular}%
+  \label{tab:camAndRt}%
+\end{table}%
+\end{appendices}
+\#表\ref{tab:camAndRt}中采用是\textit{left}文件夹中的图片，$tvecs$表示位移向量，$rvecs$表示旋转向量，每行表示一张图片的向量值，左侧3个为openCV获得，右侧三个为自己实现的方法获得。
 \end{document}

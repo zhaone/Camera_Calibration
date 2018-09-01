@@ -16,6 +16,12 @@ MathWorks.
 \newblock
   \url{https://www.mathworks.com/help/vision/ug/camera-calibration.html}.
 
+\bibitem{opencvCameraCalibrationl18830}
+openCV.
+\newblock Camera calibration and 3d reconstruction.
+\newblock
+  \url{https://docs.opencv.org/2.4/modules/calib3d/doc/camera_calibration_and_3d_reconstruction.html}.
+
 \bibitem{wikiCameraresectioning18830}
 Wikipedia.
 \newblock Camera resectioning.

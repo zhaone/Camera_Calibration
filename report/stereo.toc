@@ -1,0 +1,16 @@
+\contentsline {section}{\numberline {1}Camera Basics}{3}
+\contentsline {subsection}{\numberline {1.1}第一问：intrinsics, extrinsics,camera matrix}{3}
+\contentsline {subsubsection}{\numberline {1.1.1}模型}{3}
+\contentsline {subsubsection}{\numberline {1.1.2}Extrinsics matrix的含义}{4}
+\contentsline {subsubsection}{\numberline {1.1.3}Intrinsics matrix的含义}{4}
+\contentsline {subsection}{\numberline {1.2}第二问：3D到2D（自己推的）}{6}
+\contentsline {subsection}{\numberline {1.3}第三问：2D到3D（自己推的）}{6}
+\contentsline {subsection}{\numberline {1.4}第四问：Distortion，相机畸变}{6}
+\contentsline {subsection}{\numberline {1.5}第五问：Calibration相机标定}{7}
+\contentsline {subsection}{\numberline {1.6}第六问：openCV相机标定}{7}
+\contentsline {subsection}{\numberline {1.7}第七问：openCV去畸变 undistort}{8}
+\contentsline {subsection}{\numberline {1.8}第八问：张友正标定的实现（自己写的）}{8}
+\contentsline {subsection}{\numberline {1.9}单相机深度估计可行性（自己推的）}{9}
+\contentsline {section}{\numberline {2}Binocular Basics}{9}
+\contentsline {section}{\numberline {3}Stereo Matching}{9}
+\contentsline {section}{\numberline {A}附录：相机标定openCV与自己实现结果比较}{10}

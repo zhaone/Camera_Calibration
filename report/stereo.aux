@@ -1,35 +1,56 @@
 \relax 
 \citation{CameraModels18830}
 \citation{MathWorks18830}
-\@writefile{toc}{\contentsline {section}{\numberline {1}Camera Basics}{1}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {1.1}第一问：intrinsics, extrinsics,camera matrix}{1}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {1.1.1}模型}{1}}
-\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces 投影模型}}{1}}
-\newlabel{fig:model}{{1}{1}}
+\@writefile{toc}{\contentsline {section}{\numberline {1}Camera Basics}{3}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.1}第一问：intrinsics, extrinsics,camera matrix}{3}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {1.1.1}模型}{3}}
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces 投影模型}}{3}}
+\newlabel{fig:model}{{1}{3}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces 投影变换的坐标系变换\cite  {MathWorks18830}}}{3}}
+\newlabel{fig:calibration_coordinate_blocks}{{2}{3}}
 \citation{wikiCameraresectioning18830}
 \citation{wikiRotationmatrix18830}
-\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces 投影变换的坐标系变换\cite  {MathWorks18830}}}{2}}
-\newlabel{fig:calibration_coordinate_blocks}{{2}{2}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {1.1.2}Extrinsics matrix的含义}{2}}
 \citation{Pinholecameramodel18830}
 \citation{CSDNJessicajiel18830}
 \citation{Pinholecameramodel18830}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {1.1.3}Intrinsics matrix的含义}{3}}
-\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces 底片上的两个坐标系}}{3}}
-\newlabel{fig:calibration_coordinate_blocks}{{3}{3}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {1.2}第二问：3D到2D（自己推的）}{4}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {1.3}第三问：2D到3D（自己推的）}{4}}
-\newlabel{equ:lineExpress}{{9}{4}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {1.1.2}Extrinsics matrix的含义}{4}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {1.1.3}Intrinsics matrix的含义}{4}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces 底片上的两个坐标系}}{5}}
+\newlabel{fig:calibration_coordinate_blocks}{{3}{5}}
 \citation{CSDNJessicajiel18830}
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.2}第二问：3D到2D（自己推的）}{6}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.3}第三问：2D到3D（自己推的）}{6}}
+\newlabel{equ:lineExpress}{{9}{6}}
+\newlabel{formula:pixel2camera3D}{{11}{6}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.4}第四问：Distortion，相机畸变}{6}}
 \citation{zhang2000flexible}
-\@writefile{toc}{\contentsline {subsection}{\numberline {1.4}第四问：Distortion，相机畸变}{5}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {1.5}第五问：Calibration相机标定}{5}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.5}第五问：Calibration相机标定}{7}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.6}第六问：openCV相机标定}{7}}
+\citation{opencvCameraCalibrationl18830}
+\citation{zhang2000flexible}
+\citation{zhang2000flexible}
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.7}第七问：openCV去畸变 undistort}{8}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces 去畸变前后效果}}{8}}
+\newlabel{fig:distort}{{4}{8}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.8}第八问：张友正标定的实现（自己写的）}{8}}
+\citation{zhang2000flexible}
+\citation{zhang2000flexible}
 \bibstyle{plain}
 \bibdata{myreference}
 \bibcite{CSDNJessicajiel18830}{1}
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.9}单相机深度估计可行性（自己推的）}{9}}
+\@writefile{toc}{\contentsline {section}{\numberline {2}Binocular Basics}{9}}
+\@writefile{toc}{\contentsline {section}{\numberline {3}Stereo Matching}{9}}
 \bibcite{CameraModels18830}{2}
 \bibcite{MathWorks18830}{3}
-\bibcite{wikiCameraresectioning18830}{4}
-\bibcite{Pinholecameramodel18830}{5}
-\bibcite{wikiRotationmatrix18830}{6}
-\bibcite{zhang2000flexible}{7}
+\bibcite{opencvCameraCalibrationl18830}{4}
+\bibcite{wikiCameraresectioning18830}{5}
+\bibcite{Pinholecameramodel18830}{6}
+\bibcite{wikiRotationmatrix18830}{7}
+\bibcite{zhang2000flexible}{8}
+\@writefile{toc}{\contentsline {section}{\numberline {A}附录：相机标定openCV与自己实现结果比较}{10}}
+\newlabel{appendices:A}{{A}{10}}
+\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces openCV和自己实现的方法畸变系数比较}}{10}}
+\newlabel{tab:distort}{{1}{10}}
+\@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces openCV和自己实现的方法结果比较}}{11}}
+\newlabel{tab:camAndRt}{{2}{11}}
