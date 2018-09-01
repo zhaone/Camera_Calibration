@@ -2,21 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a900838f-c782-4d3e-b9f7-e7b39366dc91" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cameraBasic/compare/opencv/mdisCoeffs.txt" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cameraBasic/compare/zhang/mdisCoeffs.txt" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/show/undisort.jpg" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/report/stereo.pdf" afterPath="$PROJECT_DIR$/report/stereo.pdf" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/report/stereo.synctex.gz" afterPath="$PROJECT_DIR$/report/stereo.synctex.gz" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/report/stereo.tex" afterPath="$PROJECT_DIR$/report/stereo.tex" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/README.md" afterPath="$PROJECT_DIR$/README.md" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cameraBasic/calImpZhang.py" afterPath="$PROJECT_DIR$/cameraBasic/calImpZhang.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cameraBasic/cemeraBasicMain.py" afterPath="$PROJECT_DIR$/cameraBasic/cemeraBasicMain.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/report/stereo.aux" afterPath="$PROJECT_DIR$/report/stereo.aux" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/report/stereo.bbl" afterPath="$PROJECT_DIR$/report/stereo.bbl" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/report/stereo.log" afterPath="$PROJECT_DIR$/report/stereo.log" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/report/stereo.tex.bak" afterPath="$PROJECT_DIR$/report/stereo.tex.bak" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -54,11 +40,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="calImpZhang.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="calImpZhang.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/cameraBasic/calImpZhang.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1189">
-              <caret line="158" column="24" lean-forward="false" selection-start-line="158" selection-start-column="4" selection-end-line="158" selection-end-column="24" />
+            <state relative-caret-position="319">
+              <caret line="128" column="32" lean-forward="false" selection-start-line="128" selection-start-column="32" selection-end-line="128" selection-end-column="32" />
               <folding>
                 <element signature="e#78#94#0" expanded="true" />
               </folding>
@@ -66,11 +52,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="README.md" pinned="false" current-in-tab="false">
+      <file leaf-file-name="README.md" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/README.md">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="353">
-              <caret line="46" column="21" lean-forward="false" selection-start-line="46" selection-start-column="21" selection-end-line="46" selection-end-column="21" />
+            <state relative-caret-position="469">
+              <caret line="50" column="25" lean-forward="false" selection-start-line="50" selection-start-column="25" selection-end-line="50" selection-end-column="25" />
               <folding />
             </state>
           </provider>
@@ -102,8 +88,8 @@
         <option value="$PROJECT_DIR$/cameraBasic/__init__.py" />
         <option value="$PROJECT_DIR$/../Stereo_Project-master/Code/main.py" />
         <option value="$PROJECT_DIR$/cameraBasic/cemeraBasicMain.py" />
-        <option value="$PROJECT_DIR$/README.md" />
         <option value="$PROJECT_DIR$/cameraBasic/calImpZhang.py" />
+        <option value="$PROJECT_DIR$/README.md" />
       </list>
     </option>
   </component>
@@ -113,7 +99,7 @@
     <detection-done>true</detection-done>
     <sorting>DEFINITION_ORDER</sorting>
   </component>
-  <component name="ProjectFrameBounds" extendedState="7">
+  <component name="ProjectFrameBounds" extendedState="6">
     <option name="y" value="22" />
     <option name="width" value="1280" />
     <option name="height" value="722" />
@@ -231,7 +217,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-11" y="-11" width="1942" height="1042" extended-state="7" />
+    <frame x="-11" y="-11" width="1942" height="1042" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.098958336" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -443,14 +429,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/README.md">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="353">
-          <caret line="46" column="21" lean-forward="false" selection-start-line="46" selection-start-column="21" selection-end-line="46" selection-end-column="21" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/report/myreference.bib">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="310">
@@ -471,11 +449,19 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/cameraBasic/calImpZhang.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1189">
-          <caret line="158" column="24" lean-forward="false" selection-start-line="158" selection-start-column="4" selection-end-line="158" selection-end-column="24" />
+        <state relative-caret-position="319">
+          <caret line="128" column="32" lean-forward="false" selection-start-line="128" selection-start-column="32" selection-end-line="128" selection-end-column="32" />
           <folding>
             <element signature="e#78#94#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/README.md">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="469">
+          <caret line="50" column="25" lean-forward="false" selection-start-line="50" selection-start-column="25" selection-end-line="50" selection-end-column="25" />
+          <folding />
         </state>
       </provider>
     </entry>

@@ -48,4 +48,4 @@ cameraBasic
 ![image](https://github.com/zhaone/ProjectStereo/blob/master/show/undistort.jpg)
 5. 程序自动将两种方法实现的相机内参、畸变系数以及每张图片的旋转向量、位移向量保存到上述的txt文件中
 ## 联系我
-* 邮件：smzhgle@gmail.com
+* 邮件：yizhaowhu@whu.edu.cn
