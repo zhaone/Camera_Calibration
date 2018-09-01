@@ -38,7 +38,7 @@ cameraBasic
 └─__pycache__
 ```
 ## 程序使用方法
->**可以将`cemeraBasicMain`中第9行`DEBUG`变量设为1，这时只用运行`cemeraBasicMain.py`，默认选择`.img/left`文件夹中的图片，boardSize取(6,9)**
+>**可以将`cemeraBasicMain`中第9行`DEBUG`变量设为1，这时只用运行`cemeraBasicMain.py`，默认选择`.img/left`文件夹中的图片，boardSize取(6,9)。文件中已经默认设为1，直接运行代码即可。**
 1. 直接运行`cemeraBasicMain`，弹出选择文件夹框，如图所示
 ![image](https://github.com/zhaone/ProjectStereo/blob/master/show/selectFloder.jpg)
 2. 选择文件夹后，命令行输入棋盘格size：
