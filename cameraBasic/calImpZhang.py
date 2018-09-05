@@ -6,6 +6,7 @@
 import cv2 as cv
 import numpy as np
 import math
+import cameraBasic.cemeraBasicMain as ccb
 # 计算单应矩阵
 # 输入：
 # imagePoints：13*(54*2)的array，所有图片的角点坐标
@@ -171,5 +172,16 @@ def zhangCalibrateCamera(imagePoints,objectCorners):
     rvecs=ramt2rvecs(rmat)
     return cameraMatirx, disCoeffs, rvecs, tvecs
 
+def main(boardSize,filelist):
+    imagePoints, objectCorners, imageSize = ccb.findPoints(filelist, boardSize)
+    cameraMatirx, disCoeffs, rvecs, tvecs = ccb.cv_calibrate(imagePoints, objectCorners, imageSize)
+    zcameraMatirx, zdisCoeffs, zrvecs, ztvecs = zhangCalibrateCamera(imagePoints, objectCorners)
+    ccb.save('./result/compare/opencv', cameraMatirx, disCoeffs, rvecs, tvecs)
+    ccb.save('./result/compare/zhang', zcameraMatirx, zdisCoeffs, zrvecs, ztvecs)
+
+
+if __name__=="__main__":
+    filelist = ccb.getFilelist('../img/left')
+    main((6, 9), filelist)
 
 

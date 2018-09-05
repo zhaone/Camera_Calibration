@@ -1,4 +1,16 @@
-\begin{thebibliography}{1}
+\begin{thebibliography}{10}
+
+\bibitem{researchgate180903}
+Johnny Chien.
+\newblock Beginner’s guide to fundamental matrix, essential matrix and camera
+  motion recovery.
+\newblock
+  \url{https://www.researchgate.net/publication/303522230_qiantanjichujuzhenbenzhijuzhenyuxiangjiyidong_Beginner's_Guide_to_Fundamental_Matrix_Essential_Matrix_and_Camera_Motion_Recovery}.
+
+\bibitem{stereoVersion180903}
+小旭同学A0000 CSDN.
+\newblock 立体视觉.
+\newblock \url{https://blog.csdn.net/xiao4399/article/details/48037287}.
 
 \bibitem{CSDNJessicajiel18830}
 Jessica\&jie CSDN.
@@ -21,6 +33,12 @@ openCV.
 \newblock Camera calibration and 3d reconstruction.
 \newblock
   \url{https://docs.opencv.org/2.4/modules/calib3d/doc/camera_calibration_and_3d_reconstruction.html}.
+
+\bibitem{wikifundamentalMatrix180903}
+Wikipedia.
+\newblock 基础矩阵.
+\newblock
+  \url{https://zh.wikipedia.org/wiki/%E5%9F%BA%E7%A1%80%E7%9F%A9%E9%98%B5}.
 
 \bibitem{wikiCameraresectioning18830}
 Wikipedia.

@@ -1,1 +1,42 @@
-@
+@misc{CameraModels18830,
+   author = {cs.toronto.edu},
+   title = {Camera Models and Parameters},
+   howpublished = {\url{http://ftp.cs.toronto.edu/pub/psala/VM/camera-parameters.pdf}}
+}
+@misc{MathWorks18830,
+   author = {MathWorks},
+   title = {What Is Camera Calibration},
+   howpublished = {\url{https://www.mathworks.com/help/vision/ug/camera-calibration.html}}
+}
+@misc{wikiCameraresectioning18830,
+   author = {Wikipedia},
+   title = {Camera resectioning},
+   howpublished = {\url{https://en.wikipedia.org/wiki/Camera_resectioning}}
+}
+@misc{wikiRotationmatrix18830,
+   author = {Wikipedia},
+   title = {Rotation matrix},
+   howpublished = {\url{https://en.wikipedia.org/wiki/Rotation_matrix}}
+}
+@misc{Pinholecameramodel18830,
+   author = {Wikipedia},
+   title = {Pinhole camera model},
+   howpublished = {\url{https://en.wikipedia.org/wiki/Pinhole_camera_model}}
+}
+@misc{CSDNJessicajiel18830,
+   author = {Jessica\&jie CSDN},
+   title = {相机标定原理介绍（一）,
+   howpublished = {\url{https://www.cnblogs.com/Jessica-jie/p/6596450.html}}
+}
+@article{zhang2000flexible,
+  title={A flexible new technique for camera calibration},
+  author={Zhang, Zhengyou},
+  journal={IEEE Transactions on pattern analysis and machine intelligence},
+  volume={22},
+  year={2000}
+}
+@misc{opencvCameraCalibrationl18830,
+   author = {openCV},
+   title = {Camera Calibration and 3D Reconstruction},
+   howpublished = {\url{https://docs.opencv.org/2.4/modules/calib3d/doc/camera_calibration_and_3d_reconstruction.html}}
+}

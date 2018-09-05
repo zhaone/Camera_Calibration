@@ -235,14 +235,14 @@ openCV去畸变实现的代码见\url{https://github.com/zhaone/ProjectStereo/bl
 \textbf{推理}：给定标定相机和图片，即已知点图片像素点$Q(u,v)$，相机内参$K$，对应该图片外参$[R|T]$。由式(\ref{formula:pixel2camera3D}) 可确定点$Q$在相机3D坐标系中对应的直线$l_c$。又$[R|T]$已知，若将$[R|T]$写成其次坐标，其维度为4*4，取直线$l_c$上任一点$A(x_l,y_l,z_l,1)^T$，则其对应世界坐标系中一点$B(x_w,y_w,z_w,1)^T=([R|T]^{-1})(x_l,y_l,z_l,1)^T$。由于$[R|T]$是一个旋转位移矩阵，其逆矩阵$([R|T])^{-1}$ 也有相同的性质，所以直线$l$对应与世界坐标系中一条直线$l_w$，所以无法知道$Q(u,v)$在世界坐标系中对应点的位置，其深度也就无法得出。\\
 \textbf{解决方案}：两条直线可以相交于一点。可以使用两台标定好的相机对同一场景图片中反映的真实世界同一点$Q$做上述推理变换，得到真实世界$l_1,l_2$ 得到两条直线，解出两直线交点$P$即可。不过我觉得要通过一些条件限制保证两条$l_1,l_2$在同一平面有交点。
 \section{Binocular Basics}
-\subsection{第九问：Projection}
+\subsection{第九问：左右相机投影点}
 首先对左侧摄像机，由于世界坐标系与左侧相机坐标系对齐，则点$X$在左侧摄像机中坐标是就是$(X_1,X_2,X_3)$。所以点$X$ 在左侧相机底片坐标$x_l(u_l,v_l,1)$：
 $$X_3(u_l, v_l, 1)^T=M_l(X_1,X_2,X_3)^T $$
 也即是：
 $$u_l=u0+\frac{f_x*X_1}{X_3},v_l=v0+\frac{f_y*X_2}{X_3}$$
 对于右侧摄像机，点$\textbf{X}$在左侧摄像机中坐标是$(R|t)(X_1,X_2,X_3)^T$，所以点$X$在左侧相机底片坐标$x_r(u_r,v_r,1)$：
 $$z(u_r, v_r, 1)^T=M_r(R|t)(X_1,X_2,X_3,1)^T $$
-\subsection{第十问：Epipolar Line}
+\subsection{第十问：极线方程}
 两台相机模型如下图(\ref{fig:polar_geometry})所示\cite{stereoVersion180903} \cite{wikifundamentalMatrix180903}：
 \begin{figure}[htp]%%图
 	\centering  %插入的图片居中表示
@@ -267,45 +267,19 @@ z_2(X_1,X_2,X_3)&=M_l^{-1}(u_l,v_l,1)\\
 z_3(u_r,v_r,1)^T&=M_r(R|t)(X_1,X_2,X_3,1)^T\\
 z_4(u_r,v_r,1)^T&=M_r(RM_l^{-1}(u_l,v_l,1)^T+t)
 \end{align*}
-由于点$e_r,x_r$都在交线$l$上，在右侧相机坐标系中计算向量$V=e_r \times x_r$（$\times$是外积的意思）:
+由于点$e_r,x_r$都在交线$l$上，在右侧相机坐标系中计算向量$V=e_r \times x_r$（$\times$是向量积的意思）:
 \begin{align*}
 V&=e_r \times x_r\\
 &=M_rt \times M_r(RM_l^{-1}(u_l,v_l,1)^T+t)\\
 &=M_rt \times (M_rRM_l^{-1}(u_l,v_l,1)^T+M_rt)\\
 &=M_rt \times M_rRM_l^{-1}(u_l,v_l,1)^T
 \end{align*}
-则由外积积的性质可知交线$l$上点$(x,y,z)V=0$。所以式子(\ref{equ:poline})中$(A,B,C)=V$。
+则由向量积的性质可知交线$l$上点$(x,y,z)V=0$。所以式子(\ref{equ:poline})中$(A,B,C)=V$。
 综上所叙述，极线的方式如下：
-\begin{equation}
-\begin{aligned}
+\begin{align}
 equation:\qquad&Ax+By+C=0\\
-where:(A,B,C)^T&=M_rt \times M_rRM_l^{-1}(u_l,v_l,1)^T\label{equ:EpipolarLine}
-\end{aligned}
-\end{equation}
-\subsection{第十一问：Fundamental Matrix}
-由式(\ref{equ:EpipolarLine})可知：
-\begin{align}
-(u_r,v_r,1)(M_rt \times M_rRM_l^{-1}(u_l,v_l,1)^T)=0
+where:(A,B,C)^T&=M_rt \times M_rRM_l^{-1}(u_l,v_l,1)^T
 \end{align}
-记$[t]_{\times}=$为外积的矩阵形式，即\cite{wikifundamentalMatrix180903}：
-$$
-[t]_{\times}=\left [ \begin{array}{ c c c}
-0   & -t_3  & t_2 \\
-t_3 & 0 & -t_1 \\
--t_2& t_1 & 0 
-\end{array} \right ],
-$$
-则有（此处详细推导过程和外积的性质见\cite{researchgate180903}）：
-$$
-(u_r,v_r,1)(M_r^{-T}[t]_{\times}RM_l^{-1})(u_l,v_l,1)^T=0
-$$
-所以
-\begin{align}
-&F=M_r^{-T}[t]_{\times}RM_l^{-1}\\
-&makes\quad x_r^TFx_l=0
-\end{align}
-该式的$F$也对应于式子(\ref{equ:EpipolarLine})中的$M_rt \times M_rRM_l^{-1}$，即直线参数$(A,B,C)=M_r^{-T}[t]_{\times}RM_l^{-1}x_l$。\\
-\#第十、十一问主要参考了\cite{researchgate180903},\cite{wikifundamentalMatrix180903}和\cite{stereoVersion180903}，其中\cite{researchgate180903}对基础矩阵和标定的理解帮助特别大。
 \section{Stereo Matching}
 待补充
 \bibliographystyle{plain}
