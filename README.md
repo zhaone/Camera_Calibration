@@ -33,7 +33,7 @@ ProjectStereo
 >**main.py中DEBUG设置为0，则可以设置boradSize，选择图片文件夹**\
 >**有图片弹出时按任意键可以继续**\
 
-###参数：-bhcusrz
+### 参数：-bhcusrz
 1. -h 帮助\
 `python main.py -h`\
 输出参数帮助
