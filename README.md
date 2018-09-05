@@ -31,8 +31,9 @@ ProjectStereo
 >**运行方式：python main.py -bhcusrz（参数）**\
 >**程序默认设置DEBUG为1，不用设置boardSize，即默认设置boradSize是(6,9)，单相机标定采用img/left中的图片，两台相机采用img/left和img/right中的图片**\
 >**main.py中DEBUG设置为0，则可以设置boradSize，选择图片文件夹**\
->**有图片弹出时按任意键可以继续**
-##参数：-bhcusrz
+>**有图片弹出时按任意键可以继续**\
+
+###参数：-bhcusrz
 1. -h 帮助\
 `python main.py -h`\
 输出参数帮助
