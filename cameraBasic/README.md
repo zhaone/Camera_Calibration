@@ -17,6 +17,6 @@ cameraBasic
 ![image](https://github.com/zhaone/ProjectStereo/blob/master/show/chessBoardCorners.jpg)
 ### 去畸变
 ![image](https://github.com/zhaone/ProjectStereo/blob/master/show/undistort.jpg)\
-去畸变后的图片保存在`/reuslt/singleCal`
+去畸变后的图片保存在`/reuslt/undistort/`
 ### 参数
 参数见文件夹`/reuslt/singleCal/`
