@@ -20,7 +20,7 @@
 \begin{document}
 \title{Stereo Project Report}
 \author{赵懿-武汉大学 网络空间安全学院\\
-邮箱:\textit{yizhaowhu@whu.edu.cn}\\
+邮箱:\textit{yizhaome@gmail.com}\\
 项目github地址:\url{https://github.com/zhaone/ProjectStereo}}
 \maketitle
 \newpage
@@ -88,7 +88,7 @@ f_x & \gamma   & x_0 \\
 	\caption{底片上的两个坐标系}  %图片的名称
 	\label{fig:twocor}   %标签，用作引用
 \end{figure}\\
-图(\ref{fig:twocor})是建立在相机底片平面上的两个坐标系。其中原点在左下角的$(u,v)$坐标系是像素坐标系，$u,v$单位为像素的宽$d_x$和高$d_y$；原点在中间的$(x,y)$坐标系是成像平面坐标系，$x,y$单位为物理意义的长度（毫米之类的），记$(x,y)$坐标系原点在$(u,v)$坐标系中的坐标为$(u_0,v_0)$。\\
+图(\ref{fig:twocor})是建立在相机底片平面上的两个坐标系。其中原点在左下角的$(u,v)$坐标系是像素坐标系，$u,v$单位为像素的宽$d_x$和高$d_y$；原点在中间的$(x,y)$坐标系是成像平面坐标系，$x,y$单位为物理意义的长度（毫米之类的），记$(x,y)$ 坐标系原点在$(u,v)$坐标系中的坐标为$(u_0,v_0)$。\\
 通过\cite{Pinholecameramodel18830}针孔成像原理（相似三角形）可以推出相机坐标系中点$P(x_c,y_c,z_c)$在底片成像平面坐标系中的坐标$(x_m,y_m)$：
 \begin{align}
  z_c \left[ \begin{array}{c}  x_m \\ y_m \\ 1 \end{array} \right] =
@@ -154,7 +154,7 @@ $$Zc(u,v,1)^T=K(x,y,z)^T$$
 \begin{align}
 \frac{x}{a}=\frac{y}{b}=\frac{z}{c}
 \end{align}
-直线上的点都满足(\ref{equ:lineExpress})式。所以，2D点$(u,v)$对应3D相机中形状$(x,y,z)$的公式为：
+直线上的点都满足(\ref{equ:lineExpress})式。所以，2D点$(u,v)$对应3D相机中形状$(x,y,z)$ 的公式为：
 \begin{align}
 \frac{x}{a}=\frac{y}{b}=\frac{z}{c},where:(a,b,c)^T=K^{-1}(u,v,1)\label{formula:pixel2camera3D}
 \end{align}
@@ -204,7 +204,7 @@ openCV相机标定实现的代码见\url{https://github.com/zhaone/ProjectStereo
 \end{enumerate}
 \#实现这个程序主要参考了\cite{opencvCameraCalibrationl18830}的官方API
 \subsection{第七问：openCV去畸变 undistort}
-openCV去畸变实现的代码见\url{https://github.com/zhaone/ProjectStereo/blob/master/cameraBasic/cemeraBasicMain.py}中的undistort函数，主要采用了openCV的\verb"cv.undistort()"函数。去畸变效果如图(\ref{fig:distort})所示（效果还不错）。
+openCV去畸变实现的代码见\url{https://github.com/zhaone/ProjectStereo/blob/master/cameraBasic/cemeraBasicMain.py} 中的undistort函数，主要采用了openCV的\verb"cv.undistort()"函数。去畸变效果如图(\ref{fig:distort})所示（效果还不错）。
 \begin{figure}[htp]%%图
 	\centering  %插入的图片居中表示
 	\includegraphics[width=0.9\linewidth]{./figures/undistort.jpg} %插入的图，包括JPG,PNG,PDF,EPS 等，放在源文件目录下
@@ -212,7 +212,7 @@ openCV去畸变实现的代码见\url{https://github.com/zhaone/ProjectStereo/bl
 	\label{fig:distort}   %标签，用作引用
 \end{figure}\\
 \subsection{第八问：张友正标定的实现（自己写的）}
-我自己实现的张友正标定程序见\url{https://github.com/zhaone/ProjectStereo/blob/master/cameraBasic/calImpZhang.py}。实现的数学原理参考了\cite{zhang2000flexible}，特别是附录里面的算法。程序主要包括：
+我自己实现的张友正标定程序见\url{https://github.com/zhaone/ProjectStereo/blob/master/cameraBasic/calImpZhang.py}。 实现的数学原理参考了\cite{zhang2000flexible}，特别是附录里面的算法。程序主要包括：
 \begin{enumerate}
   \item \verb"homographys()" 计算单应矩阵
   \item \verb"getV()" 计算\cite{zhang2000flexible}中Section 3.1中的$V$矩阵
@@ -222,9 +222,9 @@ openCV去畸变实现的代码见\url{https://github.com/zhaone/ProjectStereo/bl
   \item \verb"ramt2rvecs()" 将旋转矩阵转化为旋转向量（为了和openCV输出一致便于比较）
   \item \verb"zhangCalibrateCamera()" 标定总流程
 \end{enumerate}
-具体的实现方法都是按照paper\cite{zhang2000flexible}中的公式实现的，不过最后没有用最小二乘法迭代优化，代码实现的细节可以在github代码注释中看到。我自己实现的张友正标定效果和openCV的API 效果比较见附录\ref{appendices:A}。可以看到，\textbf{我自己实现的张友正标定得到的相机内参camera Matrix，位移向量tvecs和旋转向量tvecs与openCV的出的结果差别不大，但是畸变系数和openCV 的结果有些差距}。我仔细检查了代码的\verb"getDisCoeffs()"函数和调试的中间结果，计算$k_1,k_2$的代码应该是没有错误。导致$k_1,k_2$ 与openCV 计算出的结果差别较大的原因我想可能有三个：
+具体的实现方法都是按照paper\cite{zhang2000flexible}中的公式实现的，不过最后没有用最小二乘法迭代优化，代码实现的细节可以在github代码注释中看到。我自己实现的张友正标定效果和openCV的API 效果比较见附录\ref{appendices:A}。 可以看到，\textbf{我自己实现的张友正标定得到的相机内参camera Matrix，位移向量tvecs和旋转向量tvecs与openCV的出的结果差别不大，但是畸变系数和openCV 的结果有些差距}。我仔细检查了代码的\verb"getDisCoeffs()"函数和调试的中间结果，计算$k_1,k_2$的代码应该是没有错误。导致$k_1,k_2$ 与openCV 计算出的结果差别较大的原因我想可能有三个：
 \begin{enumerate}
-  \item paper\cite{zhang2000flexible}中只考虑了$k_1,k_2$，忽略了$k_3,p_1,p_2$等参数
+  \item paper\cite{zhang2000flexible}中只考虑了$k_1,k_2$，忽略了$k_3,p_1,p_2$ 等参数
   \item 我得出的camera matrix中比openCV的camera matrix多了一个$\gamma$参数，可能会对结果造成影响
   \item 没有最后的最小二乘法的优化步骤
 \end{enumerate}
@@ -292,7 +292,7 @@ $$
 [t]_{\times}=\left [ \begin{array}{ c c c}
 0   & -t_3  & t_2 \\
 t_3 & 0 & -t_1 \\
--t_2& t_1 & 0 
+-t_2& t_1 & 0
 \end{array} \right ],
 $$
 则有（此处详细推导过程和外积的性质见\cite{researchgate180903}）：
@@ -302,10 +302,92 @@ $$
 所以
 \begin{align}
 &F=M_r^{-T}[t]_{\times}RM_l^{-1}\\
-&makes\quad x_r^TFx_l=0
+&makes\quad x_r^TFx_l=0\label{equ:epipolarlineF}
 \end{align}
 该式的$F$也对应于式子(\ref{equ:EpipolarLine})中的$M_rt \times M_rRM_l^{-1}$，即直线参数$(A,B,C)=M_r^{-T}[t]_{\times}RM_l^{-1}x_l$。\\
-\#第十、十一问主要参考了\cite{researchgate180903},\cite{wikifundamentalMatrix180903}和\cite{stereoVersion180903}，其中\cite{researchgate180903}对基础矩阵和标定的理解帮助特别大。
+\#第十、十一问主要参考了\cite{researchgate180903},\cite{wikifundamentalMatrix180903} 和\cite{stereoVersion180903}，其中\cite{researchgate180903}对基础矩阵和标定的理解帮助特别大。
+\subsection{第十二问：Stereo Calibration}
+主要参考了opencv \verb"stereoCalibrate()"函数\cite{opencvCameraCalibrationl18830}。实现代码见\url{https://github.com/zhaone/ProjectStereo/blob/master/binocularBasics/stereoCalibration.py}。 通过立体标定可以获得左侧相机坐标到右侧相机坐标的旋转矩阵$R$，位移矩阵$T$，以及本质矩阵$E$和基础矩阵$F$，这份代码里有opencv API实现和自己实现的计算$R,T,F$的方法，结果见附录\ref{appendices:B}，可以看到两者相差不大。
+\subsection{第十三问：3D坐标点（自己推的）}
+由式(\ref{equ:epipolarlineF})可知，极线方程为$Ax+By+C=0, where:(A,B,C)^T=Fp_l$。\\
+假设选定的$p_r$坐标为$(u_r,v_r,1)$，$p_l，p_r$在世界坐标系中对应的点为$P_l(l_1,l_2,l_3),P_r(r1_1,r_2,r_3)$。 则有以下公式成立：
+\begin{align}
+&P_l(l_1,l_2,l_3)^T=M_l^{-1}p_l\\
+p_r=M_r(RP_r+t) \qquad &equal\quad to: P_r(r_1,r_2,r_3)^T=R^{-1}(M_r^{-1}p_r-t)
+\end{align}
+由左右光心$O_l,O_r$在世界坐标系中坐标分别为$(0,0,0)^T,t$。则3D坐标为直线$O_l,P_l$和$O_r,P_r$的角点。即：
+\begin{align}
+&\frac{x}{l_1}=\frac{y}{l_2}=\frac{z}{l_3}\label{equ:line1}\\
+&\frac{x-t_1}{r_1-t_1}=\frac{x-t_2}{r_2-t_2}=\frac{x-t_3}{r_3-t_3}\label{equ:line2}
+\end{align}
+直线(\ref{equ:line1})(\ref{equ:line2})的交点即为3D点的坐标。
+\subsection{第十四问：Rectification}
+主要参考了opencv的\verb"stereoRectify(),initUndistortRectifyMap(),remap()"函数\cite{opencvCameraCalibrationl18830}。实现代码见\url{https://github.com/zhaone/ProjectStereo/blob/master/binocularBasics/rectification.py}。 主要流程如下：
+\begin{enumerate}
+  \item\verb" stereoRectify()"函数通过Stereo Calibration获得的$R,T$和相机内矩阵和畸变参数计算左右相机对齐需要的旋转矩阵$R_l,R_r$和新的投影矩阵$P_l,P_r$。
+  \item\verb"initUndistortRectifyMap()"函数对每个相机通过相机内矩阵，畸变参数和该相机的旋转矩阵，投影矩阵计算像素转换的map
+  \item\verb"remap()"函数通过上面计算的map对图片进行变换，得到对齐的左右图片
+\end{enumerate}
+一个校正的结果如下图(\ref{fig:Rectification})所示：
+\begin{figure}[htp]%%图
+	\centering  %插入的图片居中表示
+	\includegraphics[width=0.9\linewidth]{./figures/rectified.jpg} %插入的图，包括JPG,PNG,PDF,EPS 等，放在源文件目录下
+	\caption{双相机图片校正结果}  %图片的名称
+	\label{fig:Rectification}   %标签，用作引用
+\end{figure}\\
+\subsection{第十五问：Baseline（自己推的）}
+根据opencv\cite{opencvCameraCalibrationl18830}document的介绍，通过\verb"stereoRectify()"可以获得左右相机旋转矩阵$R_1,R_2$。设有世界坐标系点$P$。则其在旋转后左相机坐标系中坐标为$R_1P$，在旋转后左相机坐标系中坐标为$R_2(RP+T)$，又有校正后左相机坐标系到右相机坐标系的转换矩阵为$(I|t)$，则：
+\begin{align}
+R_2(RP+T)&=(I|t)(R_1P)\\
+equals \quad to: \quad R_2RP+R_2T&=R_1P+t\\
+so:\quad R_2T&=t=(b,0,0)^T
+\end{align}
+记$$R_2=\left( \begin{array}{c}  r_1^T \\ r_2^T \\ r_3^T \end{array} \right)$$ 则
+\begin{align}
+b=r_1^TT
+\end{align}
+\subsection{第十六问：Depth-Disparity（自己推的）}
+首先要理解问题里面的长度，其中$b$是一个物理长度，$x_l,x_r,d$都是像素长度，要通过像素单位长度进行转化，求出的点坐标也是物理长度的坐标。对齐后投影模型如图(\ref{fig:Depth_Disparity}) 所示：
+\begin{figure}[htp]%%图
+	\centering  %插入的图片居中表示
+	\includegraphics[width=0.7\linewidth]{./figures/Depth_Disparity.pdf} %插入的图，包括JPG,PNG,PDF,EPS 等，放在源文件目录下
+	\caption{Depth Disparity}  %图片的名称
+	\label{fig:Depth_Disparity}   %标签，用作引用
+\end{figure}\\
+其中$O_l,O_r$为左右相机光心，$A,B$为两光轴与相机底板平面$M$交点。平面$O_lO_rAB$ 记为平面$N$。 点$P(X,Y,Z)$ 为现实世界成像点，其在平面$N$上的点投影点为$O(X,0,Z)$，在左右相机底片上投影坐标记为$X_l(x_l,y),X_r(x_r,y)$。 点$B$ 为点$X_r$ 在平面$N$ 上的投影点。直线$CC'$为平面$N$上过点$O$与光轴垂直的直线，$CC'$ 在左右相机光轴上。三角形$O_rC'O'$由三角形$O_lCO$延$CC'$方向平移得到，$L$为$AB$与$O_rO'$的交点。相机内矩阵已知，记为$K$:
+$$K = \left [ \begin{array}{ c c c}
+f_x & 0   & c_x \\
+0  & f_y & c_y \\
+0  & 0   & 1 \\
+\end{array} \right ]$$
+\#这里没有给两个相机像素宽高是否相同，因为只有相同才能往下计算，所以我默认相同。\\
+记相机焦距为$f$，则相机单像素宽度高度分别为$d_x=\frac{f}{f_x},d_y=\frac{f}{f_y}$
+显然有（下面的线段长度都是物理长度）：
+\begin{align*}
+&BR=dd_r\\
+&BL=x_ld_x\\
+&BL=(x_l-x_r)d_x=dd_x\\
+&OO'=O_lO_r=b\\
+&BX_r=yd_y\\
+&BO_r=f\\
+&C'O'=X\\
+&OP=Y\\
+&O_rC'=Z
+\end{align*}
+由三角形相似，可以得到：
+\begin{align*}
+&\frac{Z}{f}=\frac{O_rC'}{BO_r}=\frac{OO'}{LR}=\frac{b}{dd_x}\\
+&\frac{X}{x_ld_x}=\frac{O'C'}{BL}=\frac{b}{dd_x}\\
+&\frac{Y}{yd_y}=\frac{OP}{RX_r}=\frac{OO_r}{RO_r}=\frac{b}{dd_x}
+\end{align*}
+所以：
+\begin{align}
+&X=\frac{bx_ld_x}{dd_x}=\frac{bx_l}{d}\\
+&Y=\frac{byd_y}{dd_x}=\frac{ybf_x}{df_y}\\
+&Z=\frac{bf}{dd_x}=\frac{bf_x}{d}
+\end{align}
+3D点坐标为$P(\frac{bx_l}{d},\frac{ybf_x}{df_y},\frac{bf_x}{d})^T$，即$\frac{b}{d}(x_l,\frac{yf_x}{df_y},f_x)$。\\
+关于$d_x=d_y$时$z$能否写成$\frac{bf}{d}$，从我推出来的结果看应该不能$z=\frac{bf_x}{d}$，当$f_x$不和$f$相等时就不能写成$\frac{bf}{d}$，不过$Y$可以化简为$\frac{yb}{d}$。
 \section{Stereo Matching}
 待补充
 \bibliographystyle{plain}
@@ -373,6 +455,28 @@ $$
     \end{tabular}%
   \label{tab:camAndRt}%
 \end{table}%
-\end{appendices}
 \#表\ref{tab:camAndRt}中采用是\textit{left}文件夹中的图片，$tvecs$表示位移向量，$rvecs$表示旋转向量，每行表示一张图片的向量值，左侧3个为openCV获得，右侧三个为自己实现的方法获得。
+\section{附录：立体标定openCV结果与自己实现结果}\label{appendices:B}
+% Table generated by Excel2LaTeX from sheet 'Sheet1'
+\begin{table}[htbp]
+  \centering
+  \caption{旋转矩阵，位移矩阵和基础矩阵}
+    \begin{tabular}{|c|r|r|r|r|r|r|}
+    \toprule
+          & \multicolumn{3}{c|}{Opencv} & \multicolumn{3}{c|}{Slef Implement} \\
+    \midrule
+    \multirow{3}[6]{*}{R} & 0.99998115 & 0.003936 & 0.003885037 & 0.9999852 & 0.00412905 & 0.0035307 \\
+\cmidrule{2-7}          & -0.0039357 & 0.999989 & 0.000201332 & -0.004128 & 0.99999144 & -0.000278 \\
+\cmidrule{2-7}          & -0.0038852 & -0.00022 & 0.99998652 & -0.003532 & 0.00026353 & 0.9999937 \\
+    \midrule
+    T     & 3.34674023 & 0.032175 & 0.05392305 & 3.3442471 & 0.04172117 & 0.0529604 \\
+    \midrule
+    \multirow{3}[6]{*}{F} & -4.547E-09 & 2.81E-06 & -0.001559624 & -3.84E-09 & 2.8554E-06 & -0.001878 \\
+\cmidrule{2-7}          & -2.136E-06 & 2.69E-08 & -0.092939862 & -2.22E-06 & -5.94E-08 & -0.096032 \\
+\cmidrule{2-7}          & 0.00106631 & 0.093711 & 1     & 0.0013663 & 0.09689419 & 1 \\
+    \bottomrule
+    \end{tabular}%
+  \label{tab:addlabel}%
+\end{table}%
+\end{appendices}
 \end{document}

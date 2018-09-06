@@ -100,4 +100,5 @@ def main(boardSize, pathl, pathr):
     np.savetxt("./result/stereCal.txt",(cml, dcl, cmr, dcr, cvR, cvT, cvE, cvF),'%s',',','\n')
 
 if __name__=="__main__":
+    zhao_stereoCal((6,9),'../img/left','../img/right')
     main((6,9),'../img/left','../img/right')
